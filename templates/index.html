@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>trajet de fou</title>
+</head>
+<body>
+
+	<h1>les bons trajets</h1>
+	{%for element in depart%}
+	<p>{{element}}</p>
+	{% endfor %}
+	<br><br><br><br>
+
+
+
+		<form action="/" method="get">
+			<label>Ville départ</label>
+			<input type="text" name="depart">
+			<label>Ville arrivée</label>
+			<input type="text" name="arrive">
+			<input type="submit" value="Envoyer">
+		</form>
+
+
+</body>
+</html>
