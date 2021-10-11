@@ -22,49 +22,9 @@ def end(conn):
 
 def dbCreate():
     conn = init()
-    initDevices(conn)
-    initOids(conn)
-    initLogs(conn)
-    initPoller(conn)
+    initVoiture(conn)
     return conn
 
-def initDevices(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS devices(
-                           id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                           name TEXT,
-                           model TEXT,
-                           location TEXT,
-                           serial TEXT,
-                           comSNMP TEXT
-                           )
-                   """)
-    conn.commit()
-
-def initOids(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS oids(
-                           id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                           name TEXT,
-                           oid TEXT
-                           )
-                   """)
-    conn.commit()
-    
-def initLogs(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-                   CREATE TABLE IF NOT EXISTS logs(
-                           id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                           idDevices INTEGER,
-                           timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                           log TEXT,
-                           FOREIGN KEY (idDevices) REFERENCES devices(id)
-                           )
-                   """)
-    conn.commit()
     
 def initPoller(conn):
     cursor = conn.cursor()
@@ -81,3 +41,13 @@ def initPoller(conn):
                    """)
     conn.commit()
 
+def initVoiture(conn):
+    cursor = conn.cursor()
+    cursor.execute("""
+                   CREATE TABLE IF NOT EXISTS voitures(
+                           id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                           model TEXT,
+                           autonomie TEXT
+                           )
+                   """)
+    conn.commit()
