@@ -2,6 +2,8 @@ from flask import *
 from geopy.geocoders import Nominatim
 import requests
 import json
+import initdatabase as iDB
+import dbmanage as DBm
 
 
 API_URL = "https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&facet=region"
