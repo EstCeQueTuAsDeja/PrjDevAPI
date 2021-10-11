@@ -20,6 +20,15 @@
 			<label>Ville arrivée</label>
 			<input type="text" name="arrive">
 			<input type="submit" value="Envoyer">
+
+
+
+			<select name="voitures" id="voitures-select">
+				{%for voiture in voitures %}
+			    <option value="dog">{{ voiture.model  }}</option>
+			    {% endfor %}
+			 
+			</select>
 		</form>
 
 

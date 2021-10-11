@@ -2,6 +2,7 @@ from flask import *
 from geopy.geocoders import Nominatim
 import requests
 import json
+import sqlite3 as sql
 import initdatabase as iDB
 import dbmanage as DBm
 
@@ -20,8 +21,11 @@ def index():
 		location = geolocator.geocode(depart)
 		depart = [location.latitude,location.longitude]
 
+	con = DBm.connect()	
+	con.row_factory = sql.Row
+	voitures = DBm.selectAll(con)
 
-	return render_template('index.html',depart=depart)
+	return render_template('index.html',depart=depart, voitures=voitures)
 
 @app.route('/api')
 def api():

@@ -33,9 +33,4 @@ def selectAll(conn):
 
 
 conn = connect()
-addDevice("testla","840",conn)
-
-
-
-
 initdB.end(conn)
