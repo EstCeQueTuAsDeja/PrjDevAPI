@@ -19,9 +19,9 @@ def connect():
     return conn
 
 
-def addDevice(model, autonomie, conn):
+def addDevice(model, autonomie,chargement, conn):
     cursor = conn.cursor()
-    cursor.execute("""INSERT INTO voitures(model, autonomie) VALUES(?,?)""", (model, autonomie))
+    cursor.execute("""INSERT INTO voitures(model, autonomie, chargement) VALUES(?,?,?)""", (model, autonomie, chargement))
     conn.commit()
     
 

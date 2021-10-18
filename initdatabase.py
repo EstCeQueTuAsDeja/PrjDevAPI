@@ -47,7 +47,8 @@ def initVoiture(conn):
                    CREATE TABLE IF NOT EXISTS voitures(
                            id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                            model TEXT,
-                           autonomie TEXT
+                           autonomie TEXT,
+                           chargement INTEGER
                            )
                    """)
     conn.commit()

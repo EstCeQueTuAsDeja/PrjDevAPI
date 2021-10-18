@@ -15,12 +15,7 @@ class GetTimeService(ServiceBase):
 	def get_time(distance, loading_time):
 		time=distance/130 + loading_time
 		return time
-	'''
-	@srpc(String, UnsignedInteger, _returns=Iterable(String)) 
-	def say_hello(name, times): 
-		for i in range(times): 
-			yield u'Hello, %s' % name
-	'''
+
 application = Application([GetTimeService], 'spyne.get_time.soap', 
                           in_protocol=Soap11(validator='lxml'), 
                           out_protocol=Soap11()) 

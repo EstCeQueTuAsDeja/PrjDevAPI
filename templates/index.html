@@ -25,7 +25,7 @@
 
 			<select name="voitures" id="voitures-select">
 				{%for voiture in voitures %}
-			    <option value="dog">{{ voiture.model  }}</option>
+			    <option value="{{ voiture.model }}">{{ voiture.model  }}</option>
 			    {% endfor %}
 			 
 			</select>
