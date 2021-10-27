@@ -5,6 +5,7 @@ import json
 import sqlite3 as sql
 import initdatabase as iDB
 import dbmanage as DBm
+from zeep import Client
 
 
 API_URL = "https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&facet=region"
@@ -33,6 +34,17 @@ def api():
 	content = json.loads(response.content.decode("utf-8"))
 
 	return content
+
+
+
+@app.route('/soap')
+def soap():
+	client = Client(wsdl='http://127.0.0.1:8000/?wsdl')
+	result = client.service.get_time(100, 2)
+
+	return str(result)
+
+
 
 if __name__ == '__main__':
 
