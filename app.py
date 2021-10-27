@@ -6,6 +6,9 @@ import sqlite3 as sql
 import initdatabase as iDB
 import dbmanage as DBm
 from zeep import Client
+import openrouteservice
+from openrouteservice import convert
+
 
 
 API_URL = "https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&facet=region"
@@ -30,6 +33,11 @@ def index():
 
 @app.route('/api')
 def api():
+
+	client = openrouteservice.Client(key='5b3ce3597851110001cf62480449e75063564d28ad2b9bc79cc1d62e')
+	coords = [[5.7357819,45.1875602],[6.1288847,45.8992348]]
+	res = client.directions(coords)
+	decoded = convert.decode_polyline(res['routes'][0]['geometry'])
 	response = requests.get(API_URL)
 	content = json.loads(response.content.decode("utf-8"))
 
