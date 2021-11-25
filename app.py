@@ -9,6 +9,7 @@ from zeep import Client
 import openrouteservice
 from openrouteservice import convert
 import folium
+from functions import get_geo_parameter,coords_calc,make_map_great_again
 
 
 API_URL = "https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&facet=region"
@@ -28,9 +29,6 @@ def index():
 def api():
 
 	client = openrouteservice.Client(key='5b3ce3597851110001cf62480449e75063564d28ad2b9bc79cc1d62e')
-	coords = [[5.7357819,45.1875602],[6.1288847,45.8992348]]
-	res = client.directions(coords)
-	decoded = convert.decode_polyline(res['routes'][0]['geometry'])
 	response = requests.get(API_URL)
 	content = json.loads(response.content.decode("utf-8"))
 
@@ -48,50 +46,26 @@ def soap():
 @app.route('/map')
 def map():
 
-
-	client = openrouteservice.Client(key='5b3ce3597851110001cf62480449e75063564d28ad2b9bc79cc1d62e')
-
 	if request.method== 'GET':
 		depart=request.args.get('depart')
 		arrive=request.args.get('arrive')		
-
-		geolocator = Nominatim(user_agent="Pierre")
-		location = geolocator.geocode(depart)
-		depart = [location.longitude,location.latitude]
-		location = geolocator.geocode(arrive)
-		arrive = [location.longitude,location.latitude]
-		center = [(arrive[1]+depart[1])/2,(depart[0]+arrive[0])/2]
+		coords = get_geo_parameter(depart,arrive)
 
 
-		coords = [depart,arrive]
-		res = client.directions(coords)
-		decoded = convert.decode_polyline(res['routes'][0]['geometry'])
-		distance_txt = "<h4> <b>Distance :&nbsp" + "<strong>"+str(round(res['routes'][0]['summary']['distance']/1000,1))+" Km </strong>" +"</h4></b>"
-		m = folium.Map(location=center,zoom_start=7, control_scale=True,tiles="cartodbpositron")
-		folium.GeoJson(decoded).add_child(folium.Popup(distance_txt,max_width=300)).add_to(m)
-		folium.Marker(
-		    location=list(coords[0][::-1]),
-		    popup="Grenoble",
-		    icon=folium.Icon(color="blue"),
-		).add_to(m)
+		depart = coords[0]
+		arrivee = coords[1]
 
-		folium.Marker(
-		    location=list(coords[1][::-1]),
-		    popup="Annecy",
-		    icon=folium.Icon(color="red"),
-		).add_to(m)
+		res = coords_calc(coords)
 
-	#return str(center)
-	return m._repr_html_()
+		m =  make_map_great_again(res,coords)
 
+		map_html = m._repr_html_()
+
+	return render_template('map.html', map_html = map_html)
 
 
 
 if __name__ == '__main__':
 
 	app.run(debug=True)
-	'''
-	response = requests.get(API_URL)
-	content = json.loads(response.content.decode("utf-8"))
-	print(content)
-	'''
+
