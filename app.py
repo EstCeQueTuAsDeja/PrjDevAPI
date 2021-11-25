@@ -9,10 +9,10 @@ from zeep import Client
 import openrouteservice
 from openrouteservice import convert
 import folium
-from functions import get_geo_parameter,coords_calc,make_map_great_again,add_markers,get_segment
+from functions import get_geo_parameter,coords_calc,make_map_great_again,add_markers,get_segment,request_api
 
 
-API_URL = "https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&facet=region"
+
 
 app=Flask(__name__)
 
@@ -28,7 +28,6 @@ def index():
 @app.route('/api')
 def api():
 
-	client = openrouteservice.Client(key='5b3ce3597851110001cf62480449e75063564d28ad2b9bc79cc1d62e')
 	response = requests.get(API_URL)
 	content = json.loads(response.content.decode("utf-8"))
 
@@ -54,16 +53,22 @@ def map():
 
 		depart = coords[0]
 		arrive = coords[1]
-
 		res = coords_calc(coords)
 
 
 		stop_points = get_segment(depart,arrive,4)
 
+		points_borne = []
+		for stop_point in stop_points:
+			print(stop_point)
+			point_borne=request_api(stop_point)
+			points_borne.append(point_borne)
+
+		print(points_borne)
 
 		m =  make_map_great_again(res,coords)
 
-		m = add_markers(m,stop_points)
+		m = add_markers(m,points_borne)
 
 		map_html = m._repr_html_()
 

@@ -2,7 +2,11 @@ import folium
 import openrouteservice
 from geopy.geocoders import Nominatim
 from openrouteservice import convert
+import requests
+import json
 
+
+API_URL = "https://opendata.reseaux-energies.fr/api/records/1.0/search/?dataset=bornes-irve&q=&facet=region"
 
 def get_geo_parameter(depart,arrive):
 
@@ -41,7 +45,7 @@ def make_map_great_again(res,coords):
 	folium.Marker(
 	    location=list(coords[1][::-1]),
 	    popup="Annecy",
-	    icon=folium.Icon(color="red"),
+	    icon=folium.Icon(color="green"),
 	).add_to(m)
 
 	return m
@@ -93,8 +97,24 @@ def get_segment(depart, arrive, autonomie):
 		stop_points.append(stop_point)
 
 
-	print(stop_points)
+	# print(stop_points)
 
 	return stop_points
 
 
+def request_api(coord):
+
+	rayon = 60000
+	URL = API_URL+"&geofilter.distance="+str(coord[1])+"%2C"+str(coord[0])+"%2C"+str(rayon)
+	
+	response=requests.get(URL)
+	content = json.loads(response.content.decode("utf-8"))
+
+	borne = content['records'][0]['geometry']['coordinates']
+	ville = content['records'][0]['fields']['ad_station']
+	return borne
+
+
+request_api([6.129384,45.899247])
+
+#test our response
