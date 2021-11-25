@@ -25,12 +25,13 @@ def addDevice(model, autonomie,chargement, conn):
     conn.commit()
     
 
-def selectAll(conn):
+def selectAll(conn,name):
     cursor = conn.cursor()
-    cursor.execute("""SELECT * FROM voitures""")
+    cursor.execute("""SELECT * FROM voitures WHERE model = """name""""""")
     allDevice = cursor.fetchall()
     return allDevice
 
 
 conn = connect()
+addDevice("Renault",'100',"30",conn)
 initdB.end(conn)

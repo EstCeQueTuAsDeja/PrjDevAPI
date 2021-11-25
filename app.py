@@ -50,21 +50,32 @@ def map():
 		arrive=request.args.get('arrive')		
 		coords = get_geo_parameter(depart,arrive)
 
+		con = DBm.connect()	
+		con.row_factory = sql.Row
+		voitures = DBm.selectAll(con)
+
+		autonomie = float(voitures[0][2])
+		print(voitures)
+
 
 		depart = coords[0]
 		arrive = coords[1]
 		res = coords_calc(coords)
 
+		distance = res['routes'][0]['summary']['distance']/1000
 
-		stop_points = get_segment(depart,arrive,4)
+		stop_count = round(distance/autonomie,0)+1
+		print(int(stop_count))
+
+		stop_points = get_segment(depart,arrive,stop_count)
 
 		points_borne = []
 		for stop_point in stop_points:
-			print(stop_point)
+			
 			point_borne=request_api(stop_point)
 			points_borne.append(point_borne)
 
-		print(points_borne)
+		
 
 		m =  make_map_great_again(res,coords)
 

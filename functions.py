@@ -77,7 +77,7 @@ def get_segment(depart, arrive, autonomie):
 	point_special = [abs(depart[0]-arrive[0]),abs(depart[1]-arrive[1])]
 	segment=[abs(point_special[1]/autonomie),abs(point_special[0]/autonomie)]
 
-	for i in range(1,autonomie):
+	for i in range(1,int(autonomie)):
 
 		stop_point = []
 
