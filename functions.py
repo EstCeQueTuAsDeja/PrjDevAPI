@@ -46,23 +46,55 @@ def make_map_great_again(res,coords):
 
 	return m
 
+
+def add_markers(m,stop_points):
+
+	i = 1
+
+	for stop_point in stop_points:
+
+
+		folium.Marker(
+		    location=list(stop_point[::-1]),
+		    popup="Arrêt " + str(i),
+		    icon=folium.Icon(color="red"),
+		).add_to(m)
+
+		i=i+1
+
+	return m
+
+
+
+
 def get_segment(depart, arrive, autonomie):
 
 	stop_points = []
-	point_special = [depart[1]-arrive[1],depart[0]-arrive[0]]
-	segment=[point_special[0]/autonomie,point_special[1]/autonomie]
+	point_special = [abs(depart[0]-arrive[0]),abs(depart[1]-arrive[1])]
+	segment=[abs(point_special[1]/autonomie),abs(point_special[0]/autonomie)]
 
-	for i in range(autonomie-1):
+	for i in range(1,autonomie):
 
-		if depart[1]>arrive[1]:
-			stop_points.append(depart[1] - (segment[0]*i))
-
-		else :
-			stop_points.append(depart[1] + (segment[0]*i))
-
+		stop_point = []
 
 		if depart[0]>arrive[0]:
-			stop_points.append(depart[0] - (segment[1]*i))
+			stop_point.append(round(depart[0] - (segment[1]*i),6))
 
 		else :
-			stop_points.append(depart[0] + (segment[1]*i))
+			stop_point.append(round(depart[0] + (segment[1]*i),6))
+			
+
+		if depart[1]>arrive[1]:
+			stop_point.append(round(depart[1] - (segment[0]*i),6))
+
+		else :
+			stop_point.append(round(depart[1] + (segment[0]*i),6))
+
+		stop_points.append(stop_point)
+
+
+	print(stop_points)
+
+	return stop_points
+
+
