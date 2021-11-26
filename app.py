@@ -25,21 +25,7 @@ def index():
 
 	return render_template('index.html', voitures=voitures)
 
-@app.route('/api')
-def api():
 
-	response = requests.get(API_URL)
-	content = json.loads(response.content.decode("utf-8"))
-
-	return content
-
-
-
-@app.route('/soap')
-def soap():
-
-
-	return str(result)
 
 @app.route('/map')
 def map():
@@ -70,14 +56,14 @@ def map():
 		distance = res['routes'][0]['summary']['distance']/1000
 
 		stop_count = round(distance/autonomie,0)+1
-		
+
 		temps_de_pause = (temps_chargement_voiture/60) * stop_count
 
 
 
 		stop_points = get_segment(depart,arrive,stop_count)
-		client = Client(wsdl='http://127.0.0.1:8000/?wsdl')
-		result = client.service.get_time(int(round(distance,0)), int(round(temps_de_pause,0)))
+		# client = Client(wsdl='http://127.0.0.1:8000/?wsdl')
+		# result = client.service.get_time(int(round(distance,0)), int(round(temps_de_pause,0)))
 
 		points_borne = []
 		for stop_point in stop_points:
@@ -93,7 +79,7 @@ def map():
 
 		map_html = m._repr_html_()
 
-	return render_template('map.html',map=map_html,distance=round(distance,2),time=round(result,2))
+	return render_template('map.html',map=map_html,distance=round(distance,2))
 
 
 
