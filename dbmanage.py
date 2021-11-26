@@ -24,14 +24,21 @@ def addDevice(model, autonomie,chargement, conn):
     cursor.execute("""INSERT INTO voitures(model, autonomie, chargement) VALUES(?,?,?)""", (model, autonomie, chargement))
     conn.commit()
     
-
-def selectAll(conn,name):
+def selectAll(conn):
     cursor = conn.cursor()
-    cursor.execute("""SELECT * FROM voitures WHERE model = """name""""""")
+    cursor.execute("""SELECT * FROM voitures """)
+    allDevice = cursor.fetchall()
+    return allDevice
+
+
+def selectModel(conn,name):
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM voitures WHERE model = '"""+name+"""'""")
     allDevice = cursor.fetchall()
     return allDevice
 
 
 conn = connect()
-addDevice("Renault",'100',"30",conn)
+# addDevice("tesla",'600',"30",conn)
+# addDevice("Renault",'100',"30",conn)
 initdB.end(conn)

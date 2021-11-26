@@ -47,12 +47,13 @@ def map():
 
 	if request.method== 'GET':
 		depart=request.args.get('depart')
-		arrive=request.args.get('arrive')		
+		arrive=request.args.get('arrive')
+		voiture=request.args.get('voitures')
 		coords = get_geo_parameter(depart,arrive)
 
 		con = DBm.connect()	
 		con.row_factory = sql.Row
-		voitures = DBm.selectAll(con)
+		voitures = DBm.selectModel(con,voiture)
 
 		autonomie = float(voitures[0][2])
 		print(voitures)
