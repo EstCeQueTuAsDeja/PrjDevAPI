@@ -37,8 +37,7 @@ def api():
 
 @app.route('/soap')
 def soap():
-	client = Client(wsdl='http://127.0.0.1:8000/?wsdl')
-	result = client.service.get_time(100, 2)
+
 
 	return str(result)
 
@@ -56,7 +55,12 @@ def map():
 		voitures = DBm.selectModel(con,voiture)
 
 		autonomie = float(voitures[0][2])
-		print(voitures)
+		
+
+		temps_chargement_voiture = voitures[0][3]
+		 
+
+
 
 
 		depart = coords[0]
@@ -66,9 +70,14 @@ def map():
 		distance = res['routes'][0]['summary']['distance']/1000
 
 		stop_count = round(distance/autonomie,0)+1
-		print(int(stop_count))
+		
+		temps_de_pause = (temps_chargement_voiture/60) * stop_count
+
+
 
 		stop_points = get_segment(depart,arrive,stop_count)
+		client = Client(wsdl='http://127.0.0.1:8000/?wsdl')
+		result = client.service.get_time(int(round(distance,0)), int(round(temps_de_pause,0)))
 
 		points_borne = []
 		for stop_point in stop_points:
@@ -84,7 +93,7 @@ def map():
 
 		map_html = m._repr_html_()
 
-	return map_html
+	return render_template('map.html',map=map_html,distance=round(distance,2),time=round(result,2))
 
 
 

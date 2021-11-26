@@ -13,7 +13,7 @@ class GetTimeService(ServiceBase):
 	
 	@srpc(Integer, Integer, _returns=Float)
 	def get_time(distance, loading_time):
-		time=distance/130 + loading_time
+		time=distance/70 + loading_time
 		return time
 
 application = Application([GetTimeService], 'spyne.get_time.soap', 
