@@ -1,6 +1,6 @@
 flask
 folium
 openrouteservice
-geop
+geopy
 requests
 zeep
