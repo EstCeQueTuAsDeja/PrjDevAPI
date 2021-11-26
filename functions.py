@@ -34,7 +34,7 @@ def make_map_great_again(res,coords):
 	center = [(coords[0][1]+coords[1][1])/2,(coords[0][0]+coords[1][0])/2]
 	decoded = convert.decode_polyline(res['routes'][0]['geometry'])
 	distance_txt = "<h4> <b>Distance :&nbsp" + "<strong>"+str(round(res['routes'][0]['summary']['distance']/1000,1))+" Km </strong>" +"</h4></b>"
-	m = folium.Map(location=center,zoom_start=7, control_scale=True,tiles="cartodbpositron")
+	m = folium.Map(width=50,heigth=50,location=center,zoom_start=7, control_scale=True,tiles="cartodbpositron")
 	folium.GeoJson(decoded).add_child(folium.Popup(distance_txt,max_width=300)).add_to(m)
 	folium.Marker(
 	    location=list(coords[0][::-1]),
